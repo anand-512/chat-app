@@ -42,4 +42,4 @@ app.listen(port);
 console.log('The magic happens on port ' + port);
 
 // Static files
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
