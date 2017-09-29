@@ -7,8 +7,8 @@ var server = app.listen(4000, function(){
     console.log('listening for requests on port 4000,');
 });
 
-// Static files
-app.use(express.static('public'));
+// // Static files
+// app.use(express.static('public'));
 
 // Socket setup & pass server
 var io = socket(server);
