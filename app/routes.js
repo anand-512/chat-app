@@ -14,6 +14,13 @@ module.exports = function(app, passport) {
 		});
 	});
 
+  //CHAT SECTION
+  app.get('/chat', isLoggedIn, function(req, res) {
+		res.render('chat.ejs', {
+			user : req.user
+		});
+	});
+
 	// LOGOUT ==============================
 	app.get('/logout', function(req, res) {
 		req.logout();
