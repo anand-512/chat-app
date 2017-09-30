@@ -17,7 +17,14 @@ $("#send").click(function() {
   message.value = "";
 });
 
+
 // Listen for events
+
+socket.on('joined', function(data){
+    feedback.innerHTML = '';
+    output.innerHTML += '<p><strong>' + data + '</strong> has joined the chat. </p>';
+});
+
 socket.on('chat', function(data){
     feedback.innerHTML = '';
     output.innerHTML += '<p><strong>' + data.handle + ': </strong>' + data.message + '</p>';
@@ -27,9 +34,23 @@ socket.on('typing', function(data){
     feedback.innerHTML = '<p><em>' + data + ' is typing a message...</em></p>';
 });
 
+socket.on('left', function(data){
+    feedback.innerHTML = '';
+    output.innerHTML += '<p><strong>' + data + '</strong> has left the chat. </p>';
+});
+
+
 $("#message").keyup(function(event){
     socket.emit('typing', handle.value);
     if(event.keyCode == 13){
         $("#send").click();
     }
+});
+
+$(document).ready(function() {
+    socket.emit('joined', handle.value);
+});
+
+$(window).bind('unload',function(){
+    socket.emit('left', handle.value);
 });

@@ -14,6 +14,10 @@ var server = app.listen(4000, function(){
 var io = socket(server);
 io.on('connection', function(socket) {
     console.log('made socket connection', socket.id);
+    socket.on('joined', function(data){
+        socket.broadcast.emit('joined', data);
+    });
+
 
     // Handle chat event
     socket.on('chat', function(data){
@@ -24,6 +28,10 @@ io.on('connection', function(socket) {
     // Handle typing event
     socket.on('typing', function(data){
         socket.broadcast.emit('typing', data);
+    });
+
+    socket.on('left', function(data){
+        socket.broadcast.emit('left', data);
     });
 
 });
