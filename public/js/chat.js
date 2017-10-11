@@ -8,6 +8,7 @@ var message = document.getElementById('message'),
     output = document.getElementById('output'),
     feedback = document.getElementById('feedback');
 
+
 // Emit events
 $("#send").click(function() {
   socket.emit('chat', {
@@ -20,9 +21,33 @@ $("#send").click(function() {
 
 // Listen for events
 
-socket.on('joined', function(data){
+socket.on('connect', function(){
+    socket.emit('addUser', prompt("What's your name: "));
+});
+
+socket.on('setName', function(username){
+    $('#handle').val(username);
+});
+
+socket.on('updateChat', function (data) {
     feedback.innerHTML = '';
-    output.innerHTML += '<p><strong>' + data + '</strong> has joined the chat. </p>';
+    output.innerHTML += '<p>'+ data + '</p>';
+});
+
+socket.on('updateRooms', function (rooms, current_room) {
+    $('#rooms').empty();
+    $.each(rooms, function(key, value) {
+        if(value == current_room){
+            $('#rooms').append('<div>' + value + '</div>');
+        }
+        else {
+            $('#rooms').append('<div><a href="#" class="switch-room">' + value + '</a></div>');
+        }
+    });
+});
+
+socket.on('joined', function(data){
+
 });
 
 socket.on('chat', function(data){
@@ -48,9 +73,28 @@ $("#message").keyup(function(event){
 });
 
 $(document).ready(function() {
-    socket.emit('joined', handle.value);
+
+    $('#data').keypress(function(e) {
+        if(e.which == 13) {
+            $(this).blur();
+            $('#datasend').focus().click();
+        }
+    });
+
+    $('#roombutton').click(function(){
+        var name = $('#roomname').val();
+        $('#roomname').val('');
+        socket.emit('create', name)
+    });
+
+    $("#rooms").on("click", ".switch-room", function(){
+        var room = $(this).text();
+        console.log(room);
+        socket.emit('switchRoom', room);
+    });
 });
 
 $(window).bind('unload',function(){
     socket.emit('left', handle.value);
 });
+
