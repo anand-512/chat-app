@@ -20,7 +20,7 @@
     "express": "^4.15.4",
     "socket.io": "^2.0.3",
     "ejs": "~0.8.5",
-    "mongoose": "~4.4",
+    "mongoose": "~5.7",
     "passport": "~0.1.17",
     "passport-local": "~0.1.6",
     "passport-facebook": "~1.0.2",
